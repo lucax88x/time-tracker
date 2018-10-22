@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Config\TimeTracker.Config.csproj" />
+      <ProjectReference Include="..\TimeTracker.Domain\TimeTracker.Domain.csproj" />
+      <ProjectReference Include="..\TimeTracker.Utils\TimeTracker.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="4.8.1" />
+      <PackageReference Include="AutofacSerilogIntegration" Version="2.0.0" />
+      <PackageReference Include="MediatR" Version="5.1.0" />
+    </ItemGroup>
+
+</Project>
