@@ -15,6 +15,7 @@
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Application\TimeTracker.Application.csproj" />
       <ProjectReference Include="..\TimeTracker.Test.Common\TimeTracker.Test.Common.csproj" />
+      <ProjectReference Include="..\TimeTracker.Test.Infra.Common\TimeTracker.Test.Infra.Common.csproj" />
     </ItemGroup>
 
 </Project>

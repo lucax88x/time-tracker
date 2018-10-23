@@ -1,5 +1,8 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using AutofacSerilogIntegration;
+using MediatR;
+using MediatR.Pipeline;
 
 namespace TimeTracker.Application.Ioc
 {
@@ -16,36 +19,31 @@ namespace TimeTracker.Application.Ioc
 
         private void RegisterMediatr(ContainerBuilder builder)
         {
-//            builder
-//                .RegisterType<AuditingInterceptor>()
-//                .InstancePerLifetimeScope();
-//
-//            builder
-//                .RegisterType<Mediator>()
-//                .As<IMediator>()
-//                .InstancePerLifetimeScope()
-//                .EnableClassInterceptors()
-//                .InterceptedBy(typeof(AuditingInterceptor));
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 
-//            builder
-//                .Register<SingleInstanceFactory>(ctx =>
-//                {
-//                    var c = ctx.Resolve<IComponentContext>();
-//                    return t => c.TryResolve(t, out var o) ? o : null;
-//                })
-//                .InstancePerLifetimeScope();
-//
-//            builder
-//                .Register<MultiInstanceFactory>(ctx =>
-//                {
-//                    var c = ctx.Resolve<IComponentContext>();
-//                    return t => (IEnumerable<object>) c.Resolve(typeof(IEnumerable<>).MakeGenericType(t));
-//                })
-//                .InstancePerLifetimeScope();
-//
-//            builder.RegisterGeneric(typeof(AuditingBehavior<,>)).AsImplementedInterfaces();
-//
-//            builder.RegisterAssemblyTypes(typeof(Module).Assembly).AsImplementedInterfaces();
+            var mediatrOpenTypes = new[]
+            {
+                typeof(IRequestHandler<,>),
+                typeof(INotificationHandler<>)
+            };
+
+            foreach (var mediatrOpenType in mediatrOpenTypes)
+            {
+                builder
+                    .RegisterAssemblyTypes(typeof(Module).GetTypeInfo().Assembly)
+                    .AsClosedTypesOf(mediatrOpenType)
+                    .AsImplementedInterfaces();
+            }
+
+
+            builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+
+            builder.Register<ServiceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
+            });
         }
     }
 }
