@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
-using TimeTracker.Domain.Exceptions;
+using TimeTracker.Core.Exceptions.Domain;
+using TimeTracker.Core.Exceptions.Technical;
 using TimeTracker.Utils;
 
 namespace TimeTracker.Web.Api.Filters
@@ -34,6 +35,10 @@ namespace TimeTracker.Web.Api.Filters
             else if (context.Exception is NotAuthorizedException)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+            }
+            else if (context.Exception is ConcurrencyException)
+            {
+                context.Result = new StatusCodeResult(StatusCodes.Status409Conflict);
             }
             else if (context.Exception is DomainException domainException)
             {

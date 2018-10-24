@@ -1,4 +1,5 @@
-﻿using Jil;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace TimeTracker.Utils
 {
@@ -6,18 +7,24 @@ namespace TimeTracker.Utils
     {
         string Serialize<T>(T obj);
         T Deserialize<T>(string json);
+        object Deserialize(Type type, string json);
     }
 
     public class Serializer : ISerializer
     {
         public string Serialize<T>(T obj)
         {
-            return JSON.Serialize(obj);
+            return JsonConvert.SerializeObject(obj);
         }
 
         public T Deserialize<T>(string json)
         {
-            return JSON.Deserialize<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public object Deserialize(Type type, string json)
+        {
+            return JsonConvert.DeserializeObject(json, type);
         }
     }
 }

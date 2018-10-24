@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TimeTracker.Core\TimeTracker.Core.csproj" />
+      <PackageReference Include="MediatR" Version="5.1.0" />
     </ItemGroup>
 
 </Project>

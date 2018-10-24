@@ -5,7 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TimeTracker.Core\TimeTracker.Core.csproj" />
+      <PackageReference Include="Autofac" Version="4.8.1" />
+      <PackageReference Include="CassandraCSharpDriver" Version="3.6.0" />
     </ItemGroup>
 
 </Project>

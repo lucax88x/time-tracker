@@ -19,3 +19,18 @@ Sample timetracking with these technologies:
 
 - react with typescript
 - redux
+
+## Setup
+
+Create a cassandra image
+
+```bash
+docker run -p 9042:9042 --rm --name cassandra -d cassandra
+```
+
+Execute some queries on cassandra
+
+```bash
+docker exec -it cassandra bash
+cqlsh
+```

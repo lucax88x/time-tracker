@@ -11,6 +11,7 @@ namespace TimeTracker.Application.Ioc
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule(new TimeTracker.Utils.Ioc.Module());
+            builder.RegisterModule(new TimeTracker.Infra.Write.Ioc.Module());
             
             builder.RegisterLogger();
             

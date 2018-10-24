@@ -11,4 +11,8 @@
       <PackageReference Include="MediatR" Version="5.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Infra.Write.Migrations\TimeTracker.Infra.Write.Migrations.csproj" />
+    </ItemGroup>
+
 </Project>

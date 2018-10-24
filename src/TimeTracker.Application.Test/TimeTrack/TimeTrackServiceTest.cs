@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using TimeTracker.Application.Ioc;
-using TimeTracker.Application.TimeTrack.Commands;
+using TimeTracker.Domain.TimeTrack.Commands;
 using TimeTracker.Test.Common;
 using TimeTracker.Test.Infra.Common;
 using Xunit;
@@ -10,6 +10,7 @@ namespace TimeTracker.Application.Test.TimeTrack
 {
     [Trait("Type", "Integration")]
     [Trait("Category", "Database")]
+    [Collection("DropCreateDatabase Collection")]
     public class TimeTrackServiceTest : IDisposable
     {
         private readonly Sandbox _sandbox;
@@ -24,14 +25,14 @@ namespace TimeTracker.Application.Test.TimeTrack
         [Fact]
         public async Task should_track_time()
         {
-            // ARRANGE
+            // GIVEN
             var command = new TrackTime(DateTimeOffset.UtcNow);
 
-            // ACT             
+            // WHEN           
             await _sandbox.Mediator.Send(command);
             
 
-            // ASSERT
+            // THEN
 //            await _sandbox.ShouldDb.Exists("customer", createCustomer.Id);
             _sandbox.Should.Mediator.Be("TrackTime");
         }

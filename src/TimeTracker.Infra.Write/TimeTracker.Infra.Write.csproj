@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Core\TimeTracker.Core.csproj" />
+      <ProjectReference Include="..\TimeTracker.Infra.Write.Core\TimeTracker.Infra.Write.Core.csproj" />
+      <ProjectReference Include="..\TimeTracker.Utils\TimeTracker.Utils.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="4.8.1" />
+    </ItemGroup>
+
+</Project>

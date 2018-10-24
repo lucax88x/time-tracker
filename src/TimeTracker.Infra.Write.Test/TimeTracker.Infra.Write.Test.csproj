@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.4.2" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+        <PackageReference Include="xunit" Version="2.3.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Infra.Write\TimeTracker.Infra.Write.csproj" />
+      <ProjectReference Include="..\TimeTracker.Test.Common\TimeTracker.Test.Common.csproj" />
+      <ProjectReference Include="..\TimeTracker.Test.Infra.Common\TimeTracker.Test.Infra.Common.csproj" />
+    </ItemGroup>
+
+</Project>
