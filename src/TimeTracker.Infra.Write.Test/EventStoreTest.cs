@@ -32,7 +32,7 @@ namespace TimeTracker.Infra.Write.Test
             // GIVEN
             var id = Guid.NewGuid();
 
-            var aggregateRoot = new SampleAggregateRoot(id, "some text", -1);
+            var aggregateRoot = SampleAggregateRoot.Create(id, "some text", -1);
 
             // WHEN
             await _sut.Save(aggregateRoot);
@@ -50,7 +50,7 @@ namespace TimeTracker.Infra.Write.Test
             // GIVEN
             var id = Guid.NewGuid();
 
-            var aggregateRoot = new SampleAggregateRoot(id, "some text", -1);
+            var aggregateRoot = SampleAggregateRoot.Create(id, "some text", -1);
 
             aggregateRoot.ChangeText("text 1");
             aggregateRoot.ChangeText("text 2");
@@ -72,7 +72,7 @@ namespace TimeTracker.Infra.Write.Test
         public async Task should_have_no_events_after_save()
         {
             // GIVEN
-            var aggregateRoot = new SampleAggregateRoot(Guid.NewGuid(), "some text", -1);
+            var aggregateRoot = SampleAggregateRoot.Create(Guid.NewGuid(), "some text", -1);
 
             // WHEN
             await _sut.Save(aggregateRoot);
@@ -85,7 +85,7 @@ namespace TimeTracker.Infra.Write.Test
         public async Task should_give_concurrency_exception_when_trying_to_save_an_aggregate_root_without_events()
         {
             // GIVEN
-            var aggregateRoot = new EmptyAggregateRoot();
+            var aggregateRoot = EmptyAggregateRoot.Create();
 
             // WHEN
             Func<Task> action = async () => await _sut.Save(aggregateRoot);
@@ -99,10 +99,10 @@ namespace TimeTracker.Infra.Write.Test
         {
             // GIVEN
             var id = Guid.NewGuid();
-            var aggregateRoot = new SampleAggregateRoot(id, "some text", -1);
+            var aggregateRoot = SampleAggregateRoot.Create(id, "some text", -1);
             await _sut.Save(aggregateRoot);
 
-            var sameAggregateRoot = new SampleAggregateRoot(id, "some text", 1);
+            var sameAggregateRoot = SampleAggregateRoot.Create(id, "some text", 1);
 
             // WHEN
             Func<Task> action = async () => await _sut.Save(sameAggregateRoot);
@@ -117,7 +117,7 @@ namespace TimeTracker.Infra.Write.Test
         {
             // GIVEN
             var id = Guid.NewGuid();
-            var aggregateRoot = new SampleAggregateRoot(id, "some text", 12);
+            var aggregateRoot = SampleAggregateRoot.Create(id, "some text", 12);
 
             // WHEN
             Func<Task> action = async () => await _sut.Save(aggregateRoot);

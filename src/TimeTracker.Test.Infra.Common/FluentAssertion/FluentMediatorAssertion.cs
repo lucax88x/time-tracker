@@ -14,7 +14,8 @@ namespace TimeTracker.Test.Infra.Common.FluentAssertion
 
         public void Be(string expected)
         {
-            _mediatorSniffer.ToString().Should().Be(expected);
+            var mediator = _mediatorSniffer.ToString();
+            mediator.Should().Be(expected);
         }
     }
 }

@@ -36,13 +36,12 @@ namespace TimeTracker.Test.Infra.Common
         {
             builder.RegisterType<MediatorSnifferInterceptor>();
             builder.RegisterType<MediatorSniffer>().AsSelf().SingleInstance();
-            builder.RegisterGeneric(typeof(MediatorSnifferBehavior<,>)).AsImplementedInterfaces();
 
             builder
                 .RegisterType<MediatR.Mediator>()
                 .As<IMediator>()
                 .InstancePerLifetimeScope()
-                .EnableClassInterceptors()
+                .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(MediatorSnifferInterceptor));
         }
 

@@ -8,16 +8,6 @@ namespace TimeTracker.Infra.Write.Test.Sample
     {
         public string Text { get; private set; }
 
-        public SampleAggregateRoot()
-        {
-        }
-
-        public SampleAggregateRoot(Guid id, string text, int version)
-        {
-            ApplyChange(new SampleAggregateRootCreated(id, text));
-            Version = version;
-        }
-
         public void ChangeText(string text)
         {
             ApplyChange(new SampleAggregateRootTextChanged(Id, text));
@@ -49,6 +39,16 @@ namespace TimeTracker.Infra.Write.Test.Sample
                     return;
                 }
             }
+        }
+        
+        public static SampleAggregateRoot Create(Guid id, string text, int version)
+        {
+            var instance = new SampleAggregateRoot();
+
+            instance.ApplyChange(new SampleAggregateRootCreated(id, text));
+            instance.Version = version;
+
+            return instance;
         }
     }
 }

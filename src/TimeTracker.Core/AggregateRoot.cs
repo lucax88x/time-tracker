@@ -6,7 +6,7 @@ namespace TimeTracker.Core
 {
     public abstract class AggregateRoot
     {
-        private readonly List<Event> _changes = new List<Event>();
+        private List<Event> _changes = new List<Event>();
 
         public Guid Id { get; protected set; }
         public int Version { get; protected set; } = -1;
@@ -21,7 +21,7 @@ namespace TimeTracker.Core
         {
             if (HasChanges)
             {
-                _changes.Clear();
+                _changes = new List<Event>();
             }
         }
 
@@ -37,7 +37,6 @@ namespace TimeTracker.Core
             ApplyChange(@event, true);
         }
 
-        // push atomic aggregate changes to local history for further processing (EventStore.SaveEvents)
         private void ApplyChange(Event @event, bool isNew)
         {
             Apply(@event);

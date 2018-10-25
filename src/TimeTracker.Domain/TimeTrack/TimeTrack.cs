@@ -9,11 +9,6 @@ namespace TimeTracker.Domain.TimeTrack
     {
         public DateTimeOffset When { get; private set; }
 
-        public TimeTrack(Guid id, DateTimeOffset when)
-        {            
-            ApplyChange(new TimeTracked(id, when));
-        }
-
         protected override void Apply(Event @event)
         {
             switch (@event)
@@ -25,6 +20,15 @@ namespace TimeTracker.Domain.TimeTrack
                     return;
                 }
             }
+        }
+
+        public static TimeTrack Create(Guid id, DateTimeOffset when)
+        {
+            var instance = new TimeTrack();
+
+            instance.ApplyChange(new TimeTracked(id, when));
+
+            return instance;
         }
     }
 }

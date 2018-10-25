@@ -19,9 +19,7 @@ namespace TimeTracker.Test.Infra.Common.Mediator
 
             if (argument != null)
             {
-                var sub = argument.Substring(argument.IndexOf("TimeTracker", StringComparison.Ordinal));
-                sub = sub.Substring(0, sub.IndexOf("]", StringComparison.Ordinal));
-                var resp = sub.Split('.').Last();
+                var resp = argument.Split('.').Last();
                 
                 _mediatorSniffer.Add(resp);
             }

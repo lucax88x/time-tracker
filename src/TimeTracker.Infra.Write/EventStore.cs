@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeTracker.Core;
 using TimeTracker.Core.Exceptions.Technical;
+using TimeTracker.Core.Interfaces;
 
 namespace TimeTracker.Infra.Write
 {
     public interface IEventStore
     {
-        Task Save<T>(T aggregate) where T : AggregateRoot;
+        Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot;
         Task<T> GetById<T>(Guid id) where T : AggregateRoot, new();
     }
 
@@ -21,15 +23,17 @@ namespace TimeTracker.Infra.Write
             _writeRepository = writeRepository;
         }
 
-        public async Task Save<T>(T aggregate) where T : AggregateRoot
+        public async Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot
         {
             var events = aggregate.GetUncommittedChanges();
 
             if (!events.Any()) throw new ConcurrencyException();
 
             await _writeRepository.Save(aggregate.Id, events, aggregate.Version);
-            
+
             aggregate.MarkChangesAsCommitted();
+
+            return events;
         }
 
         public async Task<T> GetById<T>(Guid id) where T : AggregateRoot, new()

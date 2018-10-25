@@ -8,5 +8,10 @@ namespace TimeTracker.Infra.Write.Test.Sample
         protected override void Apply(Event @event)
         {
         }
+
+        public static EmptyAggregateRoot Create()
+        {
+            return new EmptyAggregateRoot();
+        }
     }
 }
