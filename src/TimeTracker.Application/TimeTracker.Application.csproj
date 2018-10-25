@@ -7,6 +7,7 @@
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Config\TimeTracker.Config.csproj" />
       <ProjectReference Include="..\TimeTracker.Domain\TimeTracker.Domain.csproj" />
+      <ProjectReference Include="..\TimeTracker.Infra.Read\TimeTracker.Infra.Read.csproj" />
       <ProjectReference Include="..\TimeTracker.Infra.Write\TimeTracker.Infra.Write.csproj" />
       <ProjectReference Include="..\TimeTracker.Utils\TimeTracker.Utils.csproj" />
     </ItemGroup>

@@ -12,6 +12,7 @@ namespace TimeTracker.Application.Ioc
         {
             builder.RegisterModule(new TimeTracker.Utils.Ioc.Module());
             builder.RegisterModule(new TimeTracker.Infra.Write.Ioc.Module());
+            builder.RegisterModule(new TimeTracker.Infra.Read.Ioc.Module());
             
             builder.RegisterLogger();
             

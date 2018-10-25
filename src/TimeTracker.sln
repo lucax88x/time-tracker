@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Infra.Write.Mig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Infra.Write.Core.Test", "TimeTracker.Infra.Write.Core.Test\TimeTracker.Infra.Write.Core.Test.csproj", "{97B579DA-910B-4562-B6FD-8A1073FF951F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Infra.Read", "TimeTracker.Infra.Read\TimeTracker.Infra.Read.csproj", "{75A31A22-A6C7-4CF0-9404-5DD12E406F89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Infra.Read.Test", "TimeTracker.Infra.Read.Test\TimeTracker.Infra.Read.Test.csproj", "{4A9C486D-DE9C-4426-95E3-7EB3240C4F3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,5 +112,13 @@ Global
 		{97B579DA-910B-4562-B6FD-8A1073FF951F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97B579DA-910B-4562-B6FD-8A1073FF951F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97B579DA-910B-4562-B6FD-8A1073FF951F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75A31A22-A6C7-4CF0-9404-5DD12E406F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75A31A22-A6C7-4CF0-9404-5DD12E406F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75A31A22-A6C7-4CF0-9404-5DD12E406F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75A31A22-A6C7-4CF0-9404-5DD12E406F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A9C486D-DE9C-4426-95E3-7EB3240C4F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A9C486D-DE9C-4426-95E3-7EB3240C4F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A9C486D-DE9C-4426-95E3-7EB3240C4F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A9C486D-DE9C-4426-95E3-7EB3240C4F3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

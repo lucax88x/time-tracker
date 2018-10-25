@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,13 +29,19 @@ namespace TimeTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            
+
             services
                 .AddMvc(options =>
                     options.Filters.AddService(typeof(ApiExceptionFilter)))
                 .AddJsonOptions(options =>
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
-            
+
+            services.AddGraphQL(_ =>
+            {
+                _.EnableMetrics = true;
+                _.ExposeExceptions = true;
+            });
+
             services.AddScoped<ApiExceptionFilter>();
         }
 
@@ -41,7 +50,7 @@ namespace TimeTracker
         {
             builder.RegisterModule(new Module(Configuration));
         }
-        
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Cors cors)
         {
@@ -53,19 +62,30 @@ namespace TimeTracker
             ConfigureCors(app, cors);
             ConfigureLogger();
             app.UseMvc();
+
+            app.UseGraphQL<ISchema>();
+            
+            if (env.IsDevelopment())
+            {
+                app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+                {
+                    Path = "/ui/playground"
+                });
+            }
         }
-        
+
         private static void ConfigureCors(IApplicationBuilder app, Cors cors)
         {
             if (cors.Enabled)
             {
                 app.UseCors(builder => builder
                     .WithOrigins("http://localhost:3000")
-                    .WithHeaders("authorization", "content-type", "cache-control", "pragma", "expires", "if-modified-since")
+                    .WithHeaders("authorization", "content-type", "cache-control", "pragma", "expires",
+                        "if-modified-since")
                     .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE"));
             }
         }
-        
+
         private void ConfigureLogger()
         {
             Log.Logger = new LoggerConfiguration()
@@ -76,6 +96,5 @@ namespace TimeTracker
                 .WriteTo.Console()
                 .CreateLogger();
         }
-
     }
 }
