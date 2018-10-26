@@ -5,25 +5,25 @@ using TimeTracker.Core.Exceptions.Technical;
 using TimeTracker.Infra.Write.Ioc;
 using TimeTracker.Infra.Write.Test.Sample;
 using TimeTracker.Test.Common;
+using TimeTracker.Test.Infra.Common;
 using Xunit;
 
 namespace TimeTracker.Infra.Write.Test
 {
     [Trait("Type", "Integration")]
     [Trait("Category", "Database")]
-    [Collection("DropCreateDatabase Collection")]
-    public class EventStoreTest : IDisposable
+    public class WriteRepositoryTest : IDisposable
     {
-        private readonly AutofacSandbox _autofacSandbox;
-        private readonly IEventStore _sut;
+        private readonly Sandbox _sandbox;
+        private readonly IWriteRepository _sut;
 
-        public EventStoreTest()
+        public WriteRepositoryTest()
         {
             var configBuilder = new ConfigBuilder();
 
-            _autofacSandbox = new AutofacSandbox(configBuilder.BuildModule(), new Module());
+            _sandbox = new Sandbox(configBuilder.BuildModule(), new Module());
 
-            _sut = _autofacSandbox.Resolve<IEventStore>();
+            _sut = _sandbox.Resolve<IWriteRepository>();
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace TimeTracker.Infra.Write.Test
 
         public void Dispose()
         {
-            _autofacSandbox?.Dispose();
+            _sandbox?.Dispose();
         }
     }
 }

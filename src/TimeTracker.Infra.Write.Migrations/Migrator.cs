@@ -15,12 +15,12 @@ namespace TimeTracker.Infra.Write.Migrations
         {
             using (var session = _connectionFactory.Connect())
             {
-                var dropStatement = session.Prepare("DROP TABLE IF EXISTS es.event");
+                var dropStatement = session.Prepare("DROP TABLE IF EXISTS event");
                 session.Execute(dropStatement.Bind());
-                                
+
                 var statement =
                     session.Prepare(
-                        "CREATE TABLE es.event (id UUID, version INT, type TEXT, payload TEXT, PRIMARY KEY (id, version)) WITH CLUSTERING ORDER BY (version ASC)");
+                        "CREATE TABLE event (id UUID, version INT, type TEXT, payload TEXT, PRIMARY KEY (id, version)) WITH CLUSTERING ORDER BY (version ASC)");
                 session.Execute(statement.Bind());
             }
         }

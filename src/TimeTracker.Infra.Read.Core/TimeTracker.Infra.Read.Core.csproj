@@ -6,11 +6,13 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="4.8.1" />
-      <PackageReference Include="CassandraCSharpDriver" Version="3.6.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.0.513" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Config\TimeTracker.Config.csproj" />
+      <ProjectReference Include="..\TimeTracker.Core\TimeTracker.Core.csproj" />
+      <ProjectReference Include="..\TimeTracker.Utils\TimeTracker.Utils.csproj" />
     </ItemGroup>
 
 </Project>

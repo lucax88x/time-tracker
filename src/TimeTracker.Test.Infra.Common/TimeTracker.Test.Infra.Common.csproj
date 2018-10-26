@@ -15,4 +15,8 @@
       <ProjectReference Include="..\TimeTracker.Infra.Write.Migrations\TimeTracker.Infra.Write.Migrations.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Cassandra" />
+    </ItemGroup>
+
 </Project>

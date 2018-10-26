@@ -9,12 +9,19 @@ namespace TimeTracker.Infra.Write.Core
 
     public class ConnectionFactory : IConnectionFactory
     {
+        private readonly Config.Cassandra _cassandra;
+
+        public ConnectionFactory(Config.Cassandra cassandra)
+        {
+            _cassandra = cassandra;
+        }
+
         // TODO: check single instance etc
         public ISession Connect()
         {
             var cluster = Cluster.Builder()
-                .AddContactPoints("127.0.0.1")
-                .WithDefaultKeyspace("es")
+                .AddContactPoint(_cassandra.ContactPoint)                
+                .WithDefaultKeyspace(_cassandra.Keyspace)
                 .Build();
 
             return cluster.ConnectAndCreateDefaultKeyspaceIfNotExists();

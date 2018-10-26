@@ -13,7 +13,10 @@ namespace TimeTracker.Test.Common
 
             var defaultConfig = new Dictionary<string, string>
             {
-                {"Cors:Enabled", "true"}
+                {"Cors:Enabled", "true"},
+                {"Cassandra:ContactPoint", "127.0.0.1"},
+                {"Cassandra:Keyspace", "timetracker"},
+                {"Redis:Endpoints:0", "localhost"}
             };
 
             Add(defaultConfig);

@@ -1,108 +1,50 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cassandra;
+using TimeTracker.Core;
 using TimeTracker.Core.Exceptions.Technical;
 using TimeTracker.Core.Interfaces;
-using TimeTracker.Infra.Write.Core;
-using TimeTracker.Utils;
 
 namespace TimeTracker.Infra.Write
 {
     public interface IWriteRepository
     {
-        Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion);
-        Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid aggregateId);
+        Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot;
+        Task<T> GetById<T>(Guid id) where T : AggregateRoot, new();
     }
 
     public class WriteRepository : IWriteRepository
     {
-        private readonly IConnectionFactory _connectionFactory;
-        private readonly ISerializer _serializer;
+        private readonly IEventStore _eventStore;
 
-        public WriteRepository(IConnectionFactory connectionFactory, ISerializer serializer)
+        public WriteRepository(IEventStore eventStore)
         {
-            _connectionFactory = connectionFactory;
-            _serializer = serializer;
+            _eventStore = eventStore;
         }
 
-        public async Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion)
+        public async Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot
         {
-            using (var session = _connectionFactory.Connect())
-            {
-                // TODO: use something different than a integer for the version
-                var lastVersion = await GetLastVersion(session, aggregateId);
-                
-                if (expectedVersion != -1 && lastVersion != expectedVersion)
-                {
-                    throw new ConcurrencyException();
-                }
+            var events = aggregate.GetUncommittedChanges();
 
-                var insert = await session.PrepareAsync("INSERT INTO es.event (id, version, type, payload) VALUES (?, ?, ?, ?)");
+            if (!events.Any()) throw new ConcurrencyException();
 
-                var batch = new BatchStatement();
+            await _eventStore.Save(aggregate.Id, events, aggregate.Version);
 
-                var increasingVersion = lastVersion;
-                foreach (var evt in events)
-                {
-                    batch.Add(insert.Bind(
-                        aggregateId,
-                        ++increasingVersion,
-                        evt.GetType().AssemblyQualifiedName,
-                        _serializer.Serialize(evt)));
-                }
+            aggregate.MarkChangesAsCommitted();
 
-                await session.ExecuteAsync(batch);
-            }
+            return events;
         }
 
-        public async Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid aggregateId)
+        public async Task<T> GetById<T>(Guid id) where T : AggregateRoot, new()
         {
-            using (var session = _connectionFactory.Connect())
-            {
-                var query = await session.PrepareAsync(
-                    "SELECT type, payload, version FROM es.event WHERE id = ?");
+            var (version, events) = await _eventStore.GetById(id);
 
-                var queryResult = await session.ExecuteAsync(query.Bind(aggregateId));
+            var aggregateRoot = new T();
 
-                var rows = queryResult.ToList();
+            aggregateRoot.LoadsFromHistory(events, version);
 
-                if (!rows.Any()) throw new NotFoundItemException();
-
-                var events = new List<Event>();
-                var highestVersion = -1;
-                foreach (var row in rows)
-                {
-                    var type = row.GetValue<string>("type");
-                    var payload = row.GetValue<string>("payload");
-                    var version = row.GetValue<int>("version");
-
-                    var deserialized = _serializer.Deserialize(Type.GetType(type), payload);
-                    if (deserialized is Event evt) events.Add(evt);
-
-                    if (version > highestVersion) highestVersion = version;
-                }
-
-                return (highestVersion, events);
-            }
-        }
-
-        private async Task<int> GetLastVersion(ISession session, Guid aggregateId)
-        {
-            var query = await session.PrepareAsync("SELECT MAX(version) as max_version FROM es.event WHERE id = ?");
-
-            var queryResult = await session.ExecuteAsync(query.Bind(aggregateId));
-
-            var rows = queryResult.ToList();
-
-            if (!rows.Any()) return -1;
-
-            var row = rows.Single();
-            
-            var maxVersion = row.GetValue<int?>("max_version");
-
-            return maxVersion ?? -1;
+            return aggregateRoot;
         }
     }
 }

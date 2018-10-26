@@ -11,7 +11,6 @@ namespace TimeTracker.Application.Test.TimeTrack
 {
     [Trait("Type", "Integration")]
     [Trait("Category", "Database")]
-    [Collection("DropCreateDatabase Collection")]
     public class TimeTrackServiceTest : IDisposable
     {
         private readonly Sandbox _sandbox;
@@ -26,6 +25,8 @@ namespace TimeTracker.Application.Test.TimeTrack
         [Fact]
         public async Task should_track_time()
         {            
+            // found a way to reset the db at migrations state (transaction rollback etc?)
+            
             // GIVEN
             var command = new TrackTime(DateTimeOffset.UtcNow);
 

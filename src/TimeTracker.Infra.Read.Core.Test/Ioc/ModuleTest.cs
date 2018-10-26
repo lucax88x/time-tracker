@@ -2,7 +2,7 @@
 using TimeTracker.Test.Common;
 using Xunit;
 
-namespace TimeTracker.Infra.Write.Test.Ioc
+namespace TimeTracker.Infra.Read.Core.Test.Ioc
 {
     public class ModuleTest : IDisposable
     {
@@ -14,19 +14,19 @@ namespace TimeTracker.Infra.Write.Test.Ioc
 
             var configBuilder = new ConfigBuilder();
 
-            _scopeResolver.BuildContainer(new Config.Ioc.Module(configBuilder.Build()), new Infra.Write.Ioc.Module());
+            _scopeResolver.BuildContainer(new Config.Ioc.Module(configBuilder.Build()), new Infra.Read.Core.Ioc.Module());
         }
         
         [Fact]
-        public void should_resolve_IWriteRepository()
+        public void should_resolve_IReadConnectionFactory()
         {
-            _scopeResolver.IsSingleInstance<IEventStore, EventStore>();
+            _scopeResolver.IsSingleInstance<IReadConnectionFactory, ReadConnectionFactory>();
         }
         
         [Fact]
-        public void should_resolve_IEventStore()
+        public void should_resolve_ReadRepositoryFactory()
         {
-            _scopeResolver.IsSingleInstance<IWriteRepository, WriteRepository>();
+            _scopeResolver.IsSingleInstance<ReadRepositoryFactory>();
         }
         
         public void Dispose()
