@@ -8,9 +8,9 @@ namespace TimeTracker.Domain.TimeTrack.Commands
         public Guid Id { get; }
         public DateTimeOffset When { get; }
 
-        public TrackTime(DateTimeOffset when)
+        public TrackTime(DateTimeOffset when, Guid? id = null)
         {
-            Id = Id == Guid.Empty ? Guid.NewGuid() : Id;
+            Id = id ?? Guid.NewGuid();
             When = when;
         }
     }

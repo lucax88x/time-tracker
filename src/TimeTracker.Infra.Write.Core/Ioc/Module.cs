@@ -6,8 +6,8 @@ namespace TimeTracker.Infra.Write.Core.Ioc
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ConnectionFactory>()
-                .As<IConnectionFactory>()
+            builder.RegisterType<WriteConnectionFactory>()
+                .As<IWriteConnectionFactory>()
                 .SingleInstance();
         }
     }

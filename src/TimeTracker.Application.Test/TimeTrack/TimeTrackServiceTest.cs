@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using TimeTracker.Application.Ioc;
 using TimeTracker.Core;
 using TimeTracker.Domain.TimeTrack.Commands;
@@ -19,22 +20,23 @@ namespace TimeTracker.Application.Test.TimeTrack
         {
             var configBuilder = new ConfigBuilder();
 
-            _sandbox = new Sandbox(configBuilder.BuildModule(), new Module());
+            _sandbox = new Sandbox(new SandboxCassandraOptions(true, true), configBuilder.BuildModule(), new Module());
         }
 
         [Fact]
         public async Task should_track_time()
         {            
-            // found a way to reset the db at migrations state (transaction rollback etc?)
-            
             // GIVEN
-            var command = new TrackTime(DateTimeOffset.UtcNow);
+            var id = Guid.NewGuid();
+            
+            var command = new TrackTime(DateTimeOffset.UtcNow, id);
 
             // WHEN           
             await _sandbox.Mediator.Send(command);
             
             // THEN
             _sandbox.Should.Mediator.Be("TrackTime -> TimeTracked");
+            await _sandbox.Should.Cassandra.Exists(id);
         }
 
         public void Dispose()

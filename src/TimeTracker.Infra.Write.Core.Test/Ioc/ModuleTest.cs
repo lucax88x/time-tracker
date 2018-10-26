@@ -21,7 +21,7 @@ namespace TimeTracker.Infra.Write.Core.Test.Ioc
         [Fact]
         public void should_resolve_IConnectionFactory()
         {
-            _scopeResolver.IsSingleInstance<IConnectionFactory, ConnectionFactory>();
+            _scopeResolver.IsSingleInstance<IWriteConnectionFactory, WriteConnectionFactory>();
         }        
         
         public void Dispose()

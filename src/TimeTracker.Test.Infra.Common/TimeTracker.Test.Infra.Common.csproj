@@ -12,7 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Infra.Read.Core\TimeTracker.Infra.Read.Core.csproj" />
       <ProjectReference Include="..\TimeTracker.Infra.Write.Migrations\TimeTracker.Infra.Write.Migrations.csproj" />
+      <ProjectReference Include="..\TimeTracker.Infra.Write\TimeTracker.Infra.Write.csproj" />
     </ItemGroup>
 
     <ItemGroup>

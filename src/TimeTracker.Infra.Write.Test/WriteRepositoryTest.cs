@@ -21,7 +21,7 @@ namespace TimeTracker.Infra.Write.Test
         {
             var configBuilder = new ConfigBuilder();
 
-            _sandbox = new Sandbox(configBuilder.BuildModule(), new Module());
+            _sandbox = new Sandbox(new SandboxCassandraOptions(true, true), configBuilder.BuildModule(), new Module());
 
             _sut = _sandbox.Resolve<IWriteRepository>();
         }
@@ -38,7 +38,7 @@ namespace TimeTracker.Infra.Write.Test
             await _sut.Save(aggregateRoot);
 
             // THEN
-            var loadedAggregateRoot = await _sut.GetById<SampleAggregateRoot>(id);
+            var loadedAggregateRoot = await _sut.Get<SampleAggregateRoot>(id);
 
             loadedAggregateRoot.Id.Should().Be(id);
             loadedAggregateRoot.Text.Should().Be("some text");
@@ -62,7 +62,7 @@ namespace TimeTracker.Infra.Write.Test
             await _sut.Save(aggregateRoot);
 
             // THEN
-            var loadedAggregateRoot = await _sut.GetById<SampleAggregateRoot>(id);
+            var loadedAggregateRoot = await _sut.Get<SampleAggregateRoot>(id);
 
             loadedAggregateRoot.Id.Should().Be(id);
             loadedAggregateRoot.Text.Should().Be("final text");

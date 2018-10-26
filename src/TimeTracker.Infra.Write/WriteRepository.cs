@@ -11,7 +11,8 @@ namespace TimeTracker.Infra.Write
     public interface IWriteRepository
     {
         Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot;
-        Task<T> GetById<T>(Guid id) where T : AggregateRoot, new();
+        Task<bool> Exists(Guid id);
+        Task<T> Get<T>(Guid id) where T : AggregateRoot, new();
     }
 
     public class WriteRepository : IWriteRepository
@@ -36,7 +37,12 @@ namespace TimeTracker.Infra.Write
             return events;
         }
 
-        public async Task<T> GetById<T>(Guid id) where T : AggregateRoot, new()
+        public async Task<bool> Exists(Guid id)
+        {
+            return await _eventStore.Exists(id);
+        }        
+        
+        public async Task<T> Get<T>(Guid id) where T : AggregateRoot, new()
         {
             var (version, events) = await _eventStore.GetById(id);
 

@@ -13,23 +13,24 @@ namespace TimeTracker.Infra.Write
     public interface IEventStore
     {
         Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion);
-        Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid aggregateId);
+        Task<bool> Exists(Guid id);
+        Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid id);
     }
 
     public class EventStore : IEventStore
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IWriteConnectionFactory _writeConnectionFactory;
         private readonly ISerializer _serializer;
 
-        public EventStore(IConnectionFactory connectionFactory, ISerializer serializer)
+        public EventStore(IWriteConnectionFactory writeConnectionFactory, ISerializer serializer)
         {
-            _connectionFactory = connectionFactory;
+            _writeConnectionFactory = writeConnectionFactory;
             _serializer = serializer;
         }
 
         public async Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion)
         {
-            using (var session = _connectionFactory.Connect())
+            using (var session = _writeConnectionFactory.Connect())
             {
                 // TODO: use something different than a integer for the version
                 var lastVersion = await GetLastVersion(session, aggregateId);
@@ -57,14 +58,31 @@ namespace TimeTracker.Infra.Write
             }
         }
 
-        public async Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid aggregateId)
+        public async Task<bool> Exists(Guid id)
         {
-            using (var session = _connectionFactory.Connect())
+            using (var session = _writeConnectionFactory.Connect())
+            {
+                var query = await session.PrepareAsync(
+                    "SELECT count(id) FROM event WHERE id = ?");
+
+                var queryResult = await session.ExecuteAsync(query.Bind(id));
+
+                var row = queryResult.SingleOrDefault();
+
+                if (row == null) return false;
+
+                return true;
+            }
+        }
+        
+        public async Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid id)
+        {
+            using (var session = _writeConnectionFactory.Connect())
             {
                 var query = await session.PrepareAsync(
                     "SELECT type, payload, version FROM event WHERE id = ?");
 
-                var queryResult = await session.ExecuteAsync(query.Bind(aggregateId));
+                var queryResult = await session.ExecuteAsync(query.Bind(id));
 
                 var rows = queryResult.ToList();
 
@@ -88,11 +106,11 @@ namespace TimeTracker.Infra.Write
             }
         }
 
-        private async Task<int> GetLastVersion(ISession session, Guid aggregateId)
+        private async Task<int> GetLastVersion(ISession session, Guid id)
         {
-            var query = await session.PrepareAsync("SELECT MAX(version) as max_version FROM es.event WHERE id = ?");
+            var query = await session.PrepareAsync("SELECT MAX(version) as max_version FROM event WHERE id = ?");
 
-            var queryResult = await session.ExecuteAsync(query.Bind(aggregateId));
+            var queryResult = await session.ExecuteAsync(query.Bind(id));
 
             var rows = queryResult.ToList();
 

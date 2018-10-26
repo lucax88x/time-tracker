@@ -2,16 +2,16 @@ using Cassandra;
 
 namespace TimeTracker.Infra.Write.Core
 {
-    public interface IConnectionFactory
+    public interface IWriteConnectionFactory
     {
         ISession Connect();
     }
 
-    public class ConnectionFactory : IConnectionFactory
+    public class WriteConnectionFactory : IWriteConnectionFactory
     {
         private readonly Config.Cassandra _cassandra;
 
-        public ConnectionFactory(Config.Cassandra cassandra)
+        public WriteConnectionFactory(Config.Cassandra cassandra)
         {
             _cassandra = cassandra;
         }

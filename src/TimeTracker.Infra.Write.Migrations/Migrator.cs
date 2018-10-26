@@ -4,16 +4,16 @@ namespace TimeTracker.Infra.Write.Migrations
 {
     public class Migrator
     {
-        private readonly IConnectionFactory _connectionFactory;
+        private readonly IWriteConnectionFactory _writeConnectionFactory;
 
-        public Migrator(IConnectionFactory connectionFactory)
+        public Migrator(IWriteConnectionFactory writeConnectionFactory)
         {
-            _connectionFactory = connectionFactory;
+            _writeConnectionFactory = writeConnectionFactory;
         }
 
         public void Up()
         {
-            using (var session = _connectionFactory.Connect())
+            using (var session = _writeConnectionFactory.Connect())
             {
                 var dropStatement = session.Prepare("DROP TABLE IF EXISTS event");
                 session.Execute(dropStatement.Bind());

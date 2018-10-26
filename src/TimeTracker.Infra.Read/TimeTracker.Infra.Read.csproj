@@ -8,4 +8,8 @@
       <PackageReference Include="Autofac" Version="4.8.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Infra.Read.Core\TimeTracker.Infra.Read.Core.csproj" />
+    </ItemGroup>
+
 </Project>
