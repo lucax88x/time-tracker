@@ -34,3 +34,9 @@ Execute some queries on cassandra
 docker exec -it cassandra bash
 cqlsh
 ```
+
+Create a rejson image
+
+```bash
+docker run -p 6379:6379 --name rejson redislabs/rejson:latest
+```
