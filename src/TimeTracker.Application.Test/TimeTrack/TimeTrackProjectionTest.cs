@@ -26,21 +26,6 @@ namespace TimeTracker.Application.Test.TimeTrack
         }
 
         [Fact]
-        public async Task should_add_when_we_get_TimeTracked()
-        {
-            // GIVEN
-            var id = Guid.NewGuid();
-            var evt = new TimeTracked(id, DateTimeOffset.UtcNow);
-
-            // WHEN           
-            await _sandbox.Mediator.Publish(evt);
-
-            // THEN
-            _sandbox.Should.Mediator.Be("TimeTracked");
-            await _sandbox.Should.Redis.Exists("timetrack", id);
-        }
-
-        [Fact]
         public async Task should_get_by_id()
         {
             // TODO: start adding a scenario for adding some data

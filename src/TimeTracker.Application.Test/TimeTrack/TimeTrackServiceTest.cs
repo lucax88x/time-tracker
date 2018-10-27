@@ -37,6 +37,7 @@ namespace TimeTracker.Application.Test.TimeTrack
             // THEN
             _sandbox.Should.Mediator.Be("TrackTime -> TimeTracked");
             await _sandbox.Should.Cassandra.Exists(id);
+            await _sandbox.Should.Redis.Exists("timetrack", id);
         }
 
         public void Dispose()
