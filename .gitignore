@@ -47,4 +47,15 @@ artifacts/
 node_modules/
 logs/
 wwwroot/
-**/yarn-error.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+src/app/build
+
+# misc
+src/app/.DS_Store
+src/app/.env.local
+src/app/.env.development.local
+src/app/.env.test.local
+src/app/.env.production.local
