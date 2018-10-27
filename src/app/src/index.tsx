@@ -1,5 +1,8 @@
 import './index.scss';
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import LuxonUtils from 'material-ui-pickers/utils/luxon-utils';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -8,21 +11,27 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 
-import { TodosActions } from './actions';
+import { TimeTrackActions } from './actions';
 import App from './app';
 import epics from './epics';
 import rootReducer from './reducers';
 import registerServiceWorker from './registerServiceWorker';
-import { ITodosState } from './states/todos';
+import { ITimeTrackState } from './states/time-track';
+
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+});
 
 const logger = createLogger({
   collapsed: true
 });
 
 const epicMiddleware = createEpicMiddleware<
-  TodosActions,
-  TodosActions,
-  ITodosState
+  TimeTrackActions,
+  TimeTrackActions,
+  ITimeTrackState
 >();
 
 const store = createStore(
@@ -34,7 +43,11 @@ epicMiddleware.run(epics);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <MuiPickersUtilsProvider utils={LuxonUtils}>
+        <App />
+      </MuiPickersUtilsProvider>
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );

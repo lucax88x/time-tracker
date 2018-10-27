@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StackExchange.Redis;
@@ -18,6 +21,17 @@ namespace TimeTracker.Infra.Read.Core
 
         Task<T> Get<T>(Guid id, string path = ".", CommandFlags flags = CommandFlags.None);
         Task<T> Get<T>(RedisKey key, string path = ".", CommandFlags flags = CommandFlags.None);
+
+        Task SortedSetAdd<T>(RedisKey key, double score, T obj, CommandFlags flags = CommandFlags.None);
+
+        Task<ImmutableArray<T>> SortedSetRangeByScore<T>(RedisKey key,
+            double start = double.NegativeInfinity,
+            double stop = double.PositiveInfinity,
+            Exclude exclude = Exclude.None,
+            Order order = Order.Ascending,
+            long skip = 0,
+            long take = -1,
+            CommandFlags flags = CommandFlags.None);
     }
 
     public class ReadRepository : IReadRepository
@@ -74,6 +88,29 @@ namespace TimeTracker.Infra.Read.Core
             if (value.IsNull) throw new NotFoundItemException();
 
             return _serializer.Deserialize<T>(Encoding.UTF8.GetString((byte[]) value));
+        }
+
+        public async Task SortedSetAdd<T>(RedisKey key, double score, T obj, CommandFlags flags = CommandFlags.None)
+        {
+            var json = _serializer.Serialize(obj);
+
+            await _database.SortedSetAddAsync(key, json, score, flags);
+        }
+
+        public async Task<ImmutableArray<T>> SortedSetRangeByScore<T>(RedisKey key,
+            double start = double.NegativeInfinity,
+            double stop = double.PositiveInfinity,
+            Exclude exclude = Exclude.None,
+            Order order = Order.Ascending,
+            long skip = 0,
+            long take = -1,
+            CommandFlags flags = CommandFlags.None)
+        {
+            var result =
+                await _database.SortedSetRangeByScoreAsync(key, start, stop, exclude, order, skip, take, flags);
+
+            return result.Select(m => m == RedisValue.Null ? default(T) : _serializer.Deserialize<T>(m))
+                .ToImmutableArray();
         }
     }
 }

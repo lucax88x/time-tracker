@@ -1,5 +1,7 @@
 import { ActionType } from 'typesafe-actions';
 
-import * as todos from './todos';
+import * as home from './home';
+import * as timeTrack from './time-track';
 
-export type TodosActions = ActionType<typeof todos>;
+export type HomeActions = ActionType<typeof home>;
+export type TimeTrackActions = ActionType<typeof timeTrack>;

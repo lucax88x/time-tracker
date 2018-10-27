@@ -1,5 +1,7 @@
-import { ITodosState } from './todos';
+import { IHomeState } from './home';
+import { ITimeTrackState } from './time-track';
 
 export class State {
-  public todos: ITodosState;
+  public home: IHomeState;
+  public timeTrack: ITimeTrackState;
 }

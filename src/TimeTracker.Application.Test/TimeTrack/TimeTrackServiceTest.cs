@@ -4,6 +4,7 @@ using FluentAssertions;
 using TimeTracker.Application.Ioc;
 using TimeTracker.Core;
 using TimeTracker.Domain.TimeTrack.Commands;
+using TimeTracker.Infra.Read.TimeTrack;
 using TimeTracker.Test.Common;
 using TimeTracker.Test.Infra.Common;
 using Xunit;
@@ -29,15 +30,16 @@ namespace TimeTracker.Application.Test.TimeTrack
             // GIVEN
             var id = Guid.NewGuid();
             
-            var command = new TrackTime(DateTimeOffset.UtcNow, id);
+            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, id);
 
             // WHEN           
             await _sandbox.Mediator.Send(command);
             
             // THEN
-            _sandbox.Should.Mediator.Be("TrackTime -> TimeTracked");
+            _sandbox.Should.Mediator.Be("CreateTimeTrack -> TimeTracked");
             await _sandbox.Should.Cassandra.Exists(id);
-            await _sandbox.Should.Redis.Exists("timetrack", id);
+            await _sandbox.Should.Redis.Exists.Set("timetrack", id);
+            await _sandbox.Should.Redis.Exists.SortedSet<TimeTrackReadDto>("timetrack", "by-when", 1);
         }
 
         public void Dispose()

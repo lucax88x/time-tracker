@@ -4,15 +4,15 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
 import App from './app';
+import { initialHomeState } from './reducers/home';
+import { initialTimeTrackState } from './reducers/time-track';
 import { State } from './states/state';
 
 it('renders without crashing', () => {
   // ARRANGE
   const initialState: State = {
-    todos: {
-      isTodosBusy: false,
-      todos: []
-    }
+    home: initialHomeState,
+    timeTrack: initialTimeTrackState
   };
   const store = configureStore()(initialState);
   const div = document.createElement('div');

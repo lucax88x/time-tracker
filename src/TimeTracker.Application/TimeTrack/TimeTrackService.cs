@@ -6,7 +6,7 @@ using TimeTracker.Infra.Write;
 
 namespace TimeTracker.Application.TimeTrack
 {
-    public class TimeTrackService : IRequestHandler<TrackTime>
+    public class TimeTrackService : IRequestHandler<CreateTimeTrack>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IMediator _mediator;
@@ -17,7 +17,7 @@ namespace TimeTracker.Application.TimeTrack
             _writeRepository = writeRepository;
         }
 
-        public async Task<Unit> Handle(TrackTime request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateTimeTrack request, CancellationToken cancellationToken)
         {
             var trackTime = Domain.TimeTrack.TimeTrack.Create(request.Id, request.When);
 

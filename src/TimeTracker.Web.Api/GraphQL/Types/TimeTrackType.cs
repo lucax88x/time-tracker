@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Api.GraphQL.Types
     {
         public TimeTrackType()
         {
-            Name = "timetrack";
+            Name = nameof(TimeTrackReadDto);
             Description = "It's the single time track";
 
             Field(d => d.Id, type: typeof(IdGraphType)).Description("The id of the time track.");

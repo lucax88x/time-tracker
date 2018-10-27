@@ -1,11 +1,11 @@
 import { combineEpics } from 'redux-observable';
+
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.types';
+import { TimeTrackEpic } from './time-track';
 
-import { TodosEpic } from './todos';
+const timeTrackEpic = container.get<TimeTrackEpic>(TYPES.TimeTrackEpic);
 
-const todosEpic = container.get<TodosEpic>(TYPES.TodosEpic);
-
-const epics = combineEpics(...todosEpic.epics);
+const epics = combineEpics(...timeTrackEpic.epics);
 
 export default epics;

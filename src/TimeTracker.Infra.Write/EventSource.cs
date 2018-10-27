@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Cassandra;
@@ -12,9 +13,9 @@ namespace TimeTracker.Infra.Write
 {
     public interface IEventStore
     {
-        Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion);
+        Task Save(Guid aggregateId, ImmutableList<Event> events, int expectedVersion);
         Task<bool> Exists(Guid id);
-        Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid id);
+        Task<(int Version, ImmutableList<Event> Events)> GetById(Guid id);
     }
 
     public class EventStore : IEventStore
@@ -28,19 +29,20 @@ namespace TimeTracker.Infra.Write
             _serializer = serializer;
         }
 
-        public async Task Save(Guid aggregateId, IReadOnlyCollection<Event> events, int expectedVersion)
+        public async Task Save(Guid aggregateId, ImmutableList<Event> events, int expectedVersion)
         {
             using (var session = _writeConnectionFactory.Connect())
             {
                 // TODO: use something different than a integer for the version
                 var lastVersion = await GetLastVersion(session, aggregateId);
-                
+
                 if (expectedVersion != -1 && lastVersion != expectedVersion)
                 {
                     throw new ConcurrencyException();
                 }
 
-                var insert = await session.PrepareAsync("INSERT INTO event (id, version, type, payload) VALUES (?, ?, ?, ?)");
+                var insert =
+                    await session.PrepareAsync("INSERT INTO event (id, version, type, payload) VALUES (?, ?, ?, ?)");
 
                 var batch = new BatchStatement();
 
@@ -74,8 +76,8 @@ namespace TimeTracker.Infra.Write
                 return true;
             }
         }
-        
-        public async Task<(int Version, IReadOnlyCollection<Event> Events)> GetById(Guid id)
+
+        public async Task<(int Version, ImmutableList<Event> Events)> GetById(Guid id)
         {
             using (var session = _writeConnectionFactory.Connect())
             {
@@ -102,7 +104,7 @@ namespace TimeTracker.Infra.Write
                     if (version > highestVersion) highestVersion = version;
                 }
 
-                return (highestVersion, events);
+                return (highestVersion, events.ToImmutableList());
             }
         }
 
@@ -117,7 +119,7 @@ namespace TimeTracker.Infra.Write
             if (!rows.Any()) return -1;
 
             var row = rows.Single();
-            
+
             var maxVersion = row.GetValue<int?>("max_version");
 
             return maxVersion ?? -1;

@@ -8,7 +8,8 @@ namespace TimeTracker.Web.Api.GraphQL
         public TimeTrackerSchema(IDependencyResolver resolver)
             : base(resolver)
         {
-            Query = resolver.Resolve<TimeTrackerQuery>();
+            Query = resolver.Resolve<TimeTrackQuery>();
+            Mutation = resolver.Resolve<TimeTrackMutation>();
         }
     }
 }

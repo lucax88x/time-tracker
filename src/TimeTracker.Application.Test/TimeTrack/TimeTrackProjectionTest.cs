@@ -29,6 +29,7 @@ namespace TimeTracker.Application.Test.TimeTrack
         public async Task should_get_by_id()
         {
             // TODO: start adding a scenario for adding some data
+            // TODO: do the same for other queries
             // GIVEN
             var id = Guid.NewGuid();
             var when = DateTimeOffset.UtcNow;

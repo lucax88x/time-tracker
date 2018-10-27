@@ -79,7 +79,7 @@ namespace TimeTracker
             if (cors.Enabled)
             {
                 app.UseCors(builder => builder
-                    .WithOrigins("http://localhost:3000")
+                    .WithOrigins("http://localhost:3000", "http://localhost:5000")
                     .WithHeaders("authorization", "content-type", "cache-control", "pragma", "expires",
                         "if-modified-since")
                     .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE"));

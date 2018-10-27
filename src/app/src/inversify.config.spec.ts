@@ -1,7 +1,7 @@
 import { forEachObjIndexed } from 'ramda';
 
-import { ITodoApi } from './apis/interfaces';
-import { TodosEpic } from './epics/todos';
+import { ITimeTrackApi } from './apis/interfaces';
+import { TimeTrackEpic } from './epics/time-track';
 import { container } from './inversify.config';
 import { TYPES } from './inversify.types';
 
@@ -12,10 +12,10 @@ describe('Inversify Container', () => {
       TYPES
     );
   });
-  it('resolve ITodoApi', () => {
-    expect(container.get<ITodoApi>(TYPES.ITodoApi)).not.toBeNull();
+  it('resolve ITimeTrackApi', () => {
+    expect(container.get<ITimeTrackApi>(TYPES.ITimeTrackApi)).not.toBeNull();
   });
-  it('resolve TodosEpic', () => {
-    expect(container.get<TodosEpic>(TYPES.TodosEpic)).not.toBeNull();
+  it('resolve TimeTrackEpic', () => {
+    expect(container.get<TimeTrackEpic>(TYPES.TimeTrackEpic)).not.toBeNull();
   });
 });

@@ -116,6 +116,8 @@ namespace TimeTracker.Test.Infra.Common
             builder.RegisterType<FluentCassandraAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             builder.RegisterType<FluentRedisAssertion>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);            
+            builder.RegisterType<FluentRedisExistsAssertion>().AsSelf().SingleInstance()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
 

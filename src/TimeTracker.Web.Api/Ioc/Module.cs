@@ -6,6 +6,7 @@ using GraphQL.Types;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Web.Api.GraphQL;
 using TimeTracker.Web.Api.GraphQL.Types;
+using TimeTracker.Web.Api.GraphQL.Types.Inputs;
 
 namespace TimeTracker.Web.Api.Ioc
 {
@@ -33,8 +34,14 @@ namespace TimeTracker.Web.Api.Ioc
 
             builder.RegisterType<TimeTrackType>()
                 .AsSelf();
+            builder.RegisterType<TimeTrackInputType>()
+                .AsSelf();           
+            builder.RegisterType<CreateOrUpdateType>()
+                .AsSelf();
 
-            builder.RegisterType<TimeTrackerQuery>()
+            builder.RegisterType<TimeTrackQuery>()
+                .AsSelf();
+            builder.RegisterType<TimeTrackMutation>()
                 .AsSelf();
             builder.RegisterType<TimeTrackerSchema>()
                 .As<ISchema>();

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,7 +10,8 @@ namespace TimeTracker.Application.TimeTrack
 {
     public class TimeTrackProjection : 
         INotificationHandler<TimeTracked>,
-        IRequestHandler<GetTimeTrackById, TimeTrackReadDto>
+        IRequestHandler<GetTimeTrackById, TimeTrackReadDto>,
+        IRequestHandler<GetTimeTracks, ImmutableArray<TimeTrackReadDto>>
     {
         private readonly ITimeTrackReadRepository _timeTrackReadRepository;
 
@@ -26,6 +28,11 @@ namespace TimeTracker.Application.TimeTrack
         public async Task<TimeTrackReadDto> Handle(GetTimeTrackById request, CancellationToken cancellationToken)
         {
             return await _timeTrackReadRepository.GetById(request.Id);
+        }
+
+        public async Task<ImmutableArray<TimeTrackReadDto>> Handle(GetTimeTracks request, CancellationToken cancellationToken)
+        {
+            return await _timeTrackReadRepository.Get();
         }
     }
 }

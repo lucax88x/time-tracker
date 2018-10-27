@@ -25,7 +25,7 @@ Sample timetracking with these technologies:
 Create a cassandra image
 
 ```bash
-docker run -p 9042:9042 --rm --name cassandra -d cassandra
+docker run -p 9042:9042 --name cassandra cassandra
 ```
 
 Execute some queries on cassandra

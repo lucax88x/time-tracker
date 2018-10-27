@@ -2,14 +2,14 @@ import 'reflect-metadata';
 
 import { Container } from 'inversify';
 
-import { ITodoApi } from './apis/interfaces';
-import { TodoApi } from './apis/todos';
-import { TodosEpic } from './epics/todos';
+import { ITimeTrackApi } from './apis/interfaces';
+import { TimeTrackApi } from './apis/time-track';
+import { TimeTrackEpic } from './epics/time-track';
 import { TYPES } from './inversify.types';
 
 const container = new Container();
 
-container.bind<ITodoApi>(TYPES.ITodoApi).to(TodoApi);
-container.bind<TodosEpic>(TYPES.TodosEpic).to(TodosEpic);
+container.bind<ITimeTrackApi>(TYPES.ITimeTrackApi).to(TimeTrackApi);
+container.bind<TimeTrackEpic>(TYPES.TimeTrackEpic).to(TimeTrackEpic);
 
 export { container };

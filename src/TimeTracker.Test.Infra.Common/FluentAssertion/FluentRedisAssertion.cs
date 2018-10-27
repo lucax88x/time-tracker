@@ -1,28 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using TimeTracker.Infra.Read.Core;
-
-namespace TimeTracker.Test.Infra.Common.FluentAssertion
+﻿namespace TimeTracker.Test.Infra.Common.FluentAssertion
 {
     public class FluentRedisAssertion
     {
-        private readonly ReadRepositoryFactory _readRepositoryFactory;
-
-        public FluentRedisAssertion(ReadRepositoryFactory readRepositoryFactory)
+        public FluentRedisAssertion(FluentRedisExistsAssertion fluentRedisExistsAssertion)
         {
-            _readRepositoryFactory = readRepositoryFactory;
+            Exists = fluentRedisExistsAssertion;
         }
 
-        public async Task Exists(string prefix, Guid id)
-        {
-            var readRepository = _readRepositoryFactory.Build(prefix);
-
-            var result = await readRepository.Exists(id);
-
-            if (!result) true.Should().BeFalse($"does not exist with {id}!");
-
-            true.Should().BeTrue();
-        }
+        public FluentRedisExistsAssertion Exists { get; }
     }
 }

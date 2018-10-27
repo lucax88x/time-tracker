@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using TimeTracker.Core.Interfaces;
 
 namespace TimeTracker.Core
 {
     public abstract class AggregateRoot
     {
-        private List<Event> _changes = new List<Event>();
+        private ImmutableList<Event> _changes = ImmutableList.Create<Event>();
 
         public Guid Id { get; protected set; }
         public int Version { get; protected set; } = -1;
-        public bool HasChanges => _changes.Count != 0;
+        public bool HasChanges => !_changes.IsEmpty;
 
-        public IReadOnlyCollection<Event> GetUncommittedChanges()
+        public ImmutableList<Event> GetUncommittedChanges()
         {
             return _changes;
         }
@@ -21,11 +22,11 @@ namespace TimeTracker.Core
         {
             if (HasChanges)
             {
-                _changes = new List<Event>();
+                _changes = _changes.Clear();
             }
         }
 
-        public void LoadsFromHistory(IReadOnlyCollection<Event> history, int finalVersion)
+        public void LoadsFromHistory(ImmutableList<Event> history, int finalVersion)
         {
             foreach (var e in history) ApplyChange(e, false);
 
@@ -40,7 +41,7 @@ namespace TimeTracker.Core
         private void ApplyChange(Event @event, bool isNew)
         {
             Apply(@event);
-            if (isNew) _changes.Add(@event);
+            if (isNew) _changes = _changes.Add(@event);
         }
 
         protected abstract void Apply(Event @event);

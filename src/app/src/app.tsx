@@ -1,16 +1,16 @@
-import './app.scss';
+import './assets/fonts/roboto/index.scss';
 
+import { CssBaseline } from '@material-ui/core';
 import * as React from 'react';
 
-import AddTodo from './containers/add-todo';
-import TodoList from './containers/todo-list';
+import Home from './containers/home';
 
 class App extends React.Component {
   public render() {
     return (
-      <div className="app">
-        <AddTodo />
-        <TodoList />
+      <div>
+        <CssBaseline />
+        <Home />
       </div>
     );
   }

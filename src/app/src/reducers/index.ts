@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import todos from './todos';
+import home from './home';
+import timeTrack from './time-track';
 
 export default combineReducers({
-  todos
+  home,
+  timeTrack
 });

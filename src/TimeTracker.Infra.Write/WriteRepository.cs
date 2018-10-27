@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeTracker.Core;
@@ -10,7 +11,7 @@ namespace TimeTracker.Infra.Write
 {
     public interface IWriteRepository
     {
-        Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot;
+        Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot;
         Task<bool> Exists(Guid id);
         Task<T> Get<T>(Guid id) where T : AggregateRoot, new();
     }
@@ -24,7 +25,7 @@ namespace TimeTracker.Infra.Write
             _eventStore = eventStore;
         }
 
-        public async Task<IReadOnlyCollection<Event>> Save<T>(T aggregate) where T : AggregateRoot
+        public async Task<ImmutableList<Event>> Save<T>(T aggregate) where T : AggregateRoot
         {
             var events = aggregate.GetUncommittedChanges();
 
