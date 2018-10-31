@@ -47,6 +47,6 @@ export class TimeTrackApi implements ITimeTrackApi {
           timeTrack: model
         }
       )
-      .pipe(map(output => output.id));
+      .pipe(map(output => output.timeTrack.id));
   }
 }

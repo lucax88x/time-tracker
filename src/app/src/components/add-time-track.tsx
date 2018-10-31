@@ -10,7 +10,7 @@ import {
   WithStyles,
   withStyles
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Save';
 import { Formik } from 'formik';
 import { DateTime } from 'luxon';
 import { InlineDateTimePicker } from 'material-ui-pickers';
@@ -107,13 +107,12 @@ class AddTimeTrack extends React.Component<
                 <hr />
                 <Button
                   variant="extendedFab"
-                  aria-label="Add"
+                  aria-label="Save"
                   color="primary"
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  <AddIcon />
-                  Save
+                  <SaveIcon />
                 </Button>
               </FormControl>
             </form>

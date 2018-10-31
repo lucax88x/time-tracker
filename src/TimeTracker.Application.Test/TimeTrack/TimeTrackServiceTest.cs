@@ -4,7 +4,6 @@ using FluentAssertions;
 using FluentValidation;
 using TimeTracker.Application.Ioc;
 using TimeTracker.Application.TimeTrack.Commands;
-using TimeTracker.Core.Exceptions.Technical;
 using TimeTracker.Domain.TimeTrack;
 using TimeTracker.Infra.Read.TimeTrack;
 using TimeTracker.Test.Common;
@@ -30,7 +29,7 @@ namespace TimeTracker.Application.Test.TimeTrack
         public async Task should_not_allow_to_track_with_invalid_type()
         {
             // GIVEN
-            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, (int) TimeTrackType.Unknown);
+            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, 0);
 
             // WHEN           
             Func<Task> action = async () => await _sandbox.Mediator.Send(command);

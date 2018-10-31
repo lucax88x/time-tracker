@@ -28,6 +28,7 @@ export interface IHomeProps {
 }
 
 export interface IHomeDispatches {
+  mount: () => void;
   openMenu: () => void;
   closeMenu: () => void;
   openTimeTrackDrawer: () => void;
@@ -218,6 +219,10 @@ class Home extends React.Component<
       </div>
     );
   }
+
+  public componentDidMount() {
+    this.props.mount();
+  };
 
   private handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ anchorEl: event.currentTarget });

@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { Epic } from 'redux-observable';
 import { of } from 'rxjs';
-import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
+import { fromInput } from 'src/models/time-track';
 import { isOfType } from 'typesafe-actions';
 
 import { TimeTrackActions } from '../actions';
@@ -10,7 +11,6 @@ import {
   addTimeTrackErrorAction,
   addTimeTrackSuccessAction,
   GET_TIME_TRACKS,
-  getTimeTracksAction,
   getTimeTracksErrorAction,
   getTimeTracksSuccessAction
 } from '../actions/time-track';
@@ -37,7 +37,7 @@ export class TimeTrackEpic {
       filter(isOfType(ADD_TIME_TRACK)),
       switchMap(({ payload }) =>
         this.timeTrackApi.create(payload).pipe(
-          map(_ => addTimeTrackSuccessAction()),
+          map(id => addTimeTrackSuccessAction(fromInput({ ...payload, id }))),
           catchError(error => of(addTimeTrackErrorAction()))
         )
       )
@@ -49,7 +49,6 @@ export class TimeTrackEpic {
     ITimeTrackState
   > = action$ =>
     action$.pipe(
-      startWith(getTimeTracksAction()),
       filter(isOfType(GET_TIME_TRACKS)),
       switchMap(_ =>
         this.timeTrackApi.get().pipe(

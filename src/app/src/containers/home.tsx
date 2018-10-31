@@ -8,7 +8,7 @@ import {
   openMenuAction,
   openTimeTrackDrawerAction
 } from '../actions/home';
-import { addTimeTrackAction } from '../actions/time-track';
+import { addTimeTrackAction, getTimeTracksAction } from '../actions/time-track';
 import HomeComponent, { IHomeDispatches, IHomeProps } from '../components/home';
 import {
   selectIsMenuOpen,
@@ -24,6 +24,7 @@ const mapStateToProps = (state: State): IHomeProps => ({
 const mapDispatchToProps = (
   dispatch: Dispatch<HomeActions | TimeTrackActions>
 ): IHomeDispatches => ({
+  mount: () => dispatch(getTimeTracksAction()),
   openMenu: () => dispatch(openMenuAction()),
   closeMenu: () => dispatch(closeMenuAction()),
   openTimeTrackDrawer: () => dispatch(openTimeTrackDrawerAction()),

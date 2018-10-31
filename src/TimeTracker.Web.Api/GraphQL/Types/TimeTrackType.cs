@@ -13,7 +13,6 @@ namespace TimeTracker.Web.Api.GraphQL.Types
             Field(d => d.Id, type: typeof(IdGraphType)).Description("The id of the time track.");
             Field(d => d.When).Description("When it happened");
             Field(d => d.Type, type: typeof(TimeTrackTypeEnum)).Description("The type of the time track.");
-
         }
     }
 }

@@ -11,5 +11,7 @@ export interface ICreateTimeTrackPayload {
   timeTrack: ITimeTrackInputModel;
 }
 export interface ICreateTimeTrackResponse {
-  id: string;
+  timeTrack: {
+    id: string;
+  };
 }

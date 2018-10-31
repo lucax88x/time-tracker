@@ -16,7 +16,7 @@ export const GET_TIME_TRACKS_ERROR = '[TimeTrack] Get Time Tracks Error';
 
 export const addTimeTrackAction = (model: ITimeTrackInputModel) =>
   action(ADD_TIME_TRACK, model);
-export const addTimeTrackSuccessAction = () => action(ADD_TIME_TRACK_SUCCESS);
+export const addTimeTrackSuccessAction = (model: ITimeTrackModel) => action(ADD_TIME_TRACK_SUCCESS, model);
 export const addTimeTrackErrorAction = () => action(ADD_TIME_TRACK_ERROR);
 
 export const editTimeTrackAction = (id: UUID) => action(EDIT_TIME_TRACK, id);

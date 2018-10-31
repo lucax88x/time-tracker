@@ -5,8 +5,9 @@ import {
   OPEN_MENU,
   OPEN_TIME_TRACK_DRAWER
 } from 'src/actions/home';
+import { ADD_TIME_TRACK_SUCCESS } from 'src/actions/time-track';
 
-import { HomeActions } from '../actions';
+import { HomeActions, TimeTrackActions } from '../actions';
 import { IHomeState } from '../states/home';
 
 export const initialHomeState: IHomeState = {
@@ -14,12 +15,14 @@ export const initialHomeState: IHomeState = {
   isTimeTrackDrawerOpen: false
 };
 
-const home = (state = initialHomeState, action: HomeActions): IHomeState =>
+const home = (
+  state = initialHomeState,
+  action: HomeActions | TimeTrackActions
+): IHomeState =>
   produce(state, draft => {
     switch (action.type) {
       case OPEN_MENU:
         draft.isMenuOpen = true;
-        console.log(draft);
         return;
       case CLOSE_MENU:
         draft.isMenuOpen = false;
@@ -28,6 +31,7 @@ const home = (state = initialHomeState, action: HomeActions): IHomeState =>
         draft.isTimeTrackDrawerOpen = true;
         return;
       case CLOSE_TIME_TRACK_DRAWER:
+      case ADD_TIME_TRACK_SUCCESS:
         draft.isTimeTrackDrawerOpen = false;
         return;
       default:
