@@ -6,5 +6,6 @@ namespace TimeTracker.Web.Api.GraphQL.Types.Inputs
     {
         public Guid Id { get; set; }
         public DateTimeOffset When { get; set; }
+        public int Type { get; set; }
     }
 }

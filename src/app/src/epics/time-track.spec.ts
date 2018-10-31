@@ -11,9 +11,10 @@ import {
 } from '../actions/time-track';
 import { ITimeTrackApi } from '../apis/interfaces';
 import { TimeTrackApi } from '../apis/time-track';
+import { UUID } from '../code/uuid';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.types';
-import { TimeTrackModel, TimeTrackType } from '../models/time-track';
+import { ITimeTrackModel, TimeTrackType } from '../models/time-track';
 import { ITimeTrackState } from '../states/time-track';
 import {
   getTestScheduler,
@@ -38,8 +39,12 @@ describe('TimeTrackEpic', () => {
     it('fetches all timeTracks ', () => {
       getTestScheduler().run(({ hot, cold, expectObservable }) => {
         // ARRANGE
-        const items: TimeTrackModel[] = [
-          { id: 'id', when: DateTime.local(), type: TimeTrackType.IN }
+        const items: ITimeTrackModel[] = [
+          {
+            id: UUID.Generate(),
+            when: DateTime.local(),
+            type: TimeTrackType.IN
+          }
         ];
 
         when(mockedTimeTrackApi.get()).thenReturn(cold('-a', { a: items }));

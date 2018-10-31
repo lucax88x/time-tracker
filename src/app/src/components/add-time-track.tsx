@@ -18,11 +18,12 @@ import { DateTime } from 'luxon';
 import { InlineDateTimePicker } from 'material-ui-pickers';
 import * as React from 'react';
 
+import { UUID } from '../code/uuid';
 import { TimeTrackType } from '../models/time-track';
-import { TimeTrackInputModel } from '../models/time-track.input-model';
+import { ITimeTrackInputModel } from '../models/time-track.input-model';
 
 export interface IAddTimeTrackDispatches {
-  addTimeTrack: (value: TimeTrackInputModel) => void;
+  addTimeTrack: (value: ITimeTrackInputModel) => void;
 }
 
 const flex = {
@@ -54,13 +55,16 @@ class AddTimeTrack extends React.Component<
   IAddTimeTrackDispatches & WithStyles<typeof styles>
 > {
   public render() {
+    console.log(TimeTrackType.IN);
+    console.log(TimeTrackType[TimeTrackType.IN]);
     const { classes } = this.props;
 
     return (
       <Formik
         initialValues={{
+          id: UUID.Empty,
           when: DateTime.local().toISO(),
-          type: TimeTrackType.IN.toString()
+          type: TimeTrackType[TimeTrackType.IN]
         }}
         onSubmit={this.handleSubmit}
       >
@@ -91,17 +95,17 @@ class AddTimeTrack extends React.Component<
                   <RadioGroup
                     aria-label="Tyoe"
                     name="type"
-                    value={values.type}
+                    value={values.type.toString()}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   >
                     <FormControlLabel
-                      value={TimeTrackType.IN.toString()}
+                      value={TimeTrackType[TimeTrackType.IN]}
                       control={<Radio />}
                       label="In"
                     />
                     <FormControlLabel
-                      value={TimeTrackType.OUT.toString()}
+                      value={TimeTrackType[TimeTrackType.OUT]}
                       control={<Radio />}
                       label="Out"
                     />
@@ -133,7 +137,7 @@ class AddTimeTrack extends React.Component<
     );
   }
 
-  private handleSubmit = (value: TimeTrackInputModel) => {
+  private handleSubmit = (value: ITimeTrackInputModel) => {
     this.props.addTimeTrack(value);
   };
 }

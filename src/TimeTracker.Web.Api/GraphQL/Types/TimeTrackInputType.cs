@@ -10,6 +10,7 @@ namespace TimeTracker.Web.Api.GraphQL.Types
             Name = nameof(TimeTrackInput);
             Field(x => x.Id, type: typeof(IdGraphType));
             Field(x => x.When);
+            Field(x => x.Type, type: typeof(TimeTrackTypeEnum));
         }
     }
 }

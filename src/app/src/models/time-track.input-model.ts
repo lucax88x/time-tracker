@@ -1,5 +1,5 @@
-export class TimeTrackInputModel {
-  public id?: string;
-  public when: string;
-  public type: string;
+export interface ITimeTrackInputModel {
+  id: string;
+  when: string;
+  type: string;
 }

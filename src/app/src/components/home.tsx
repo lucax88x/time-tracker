@@ -19,8 +19,7 @@ import MoreIcon from '@material-ui/icons/More';
 import * as React from 'react';
 
 import TimeTrackList from '../containers/time-track-list';
-import { TimeTrackModel } from '../models/time-track';
-import { TimeTrackInputModel } from '../models/time-track.input-model';
+import { ITimeTrackInputModel } from '../models/time-track.input-model';
 import AddTimeTrack from './add-time-track';
 
 export interface IHomeProps {
@@ -33,7 +32,7 @@ export interface IHomeDispatches {
   closeMenu: () => void;
   openTimeTrackDrawer: () => void;
   closeTimeTrackDrawer: () => void;
-  addTimeTrack: (model: TimeTrackModel) => void;
+  addTimeTrack: (model: ITimeTrackInputModel) => void;
 }
 
 interface IHomeState {
@@ -253,8 +252,8 @@ class Home extends React.Component<
     this.props.closeTimeTrackDrawer();
   };
 
-  private handleAddTimeTrack = (value: TimeTrackInputModel) => {
-    this.props.addTimeTrack(new TimeTrackModel(value));
+  private handleAddTimeTrack = (value: ITimeTrackInputModel) => {
+    this.props.addTimeTrack(value);
   };
 }
 

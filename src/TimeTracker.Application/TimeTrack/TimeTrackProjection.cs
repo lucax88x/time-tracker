@@ -22,7 +22,7 @@ namespace TimeTracker.Application.TimeTrack
 
         public async Task Handle(TimeTracked notification, CancellationToken cancellationToken)
         {
-            await _timeTrackReadRepository.Add(notification.Id, notification.When);
+            await _timeTrackReadRepository.Add(notification.Id, notification.When, (int)notification.Type);
         }
 
         public async Task<TimeTrackReadDto> Handle(GetTimeTrackById request, CancellationToken cancellationToken)

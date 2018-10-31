@@ -1,12 +1,14 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TimeTracker.Domain.TimeTrack.Commands;
+using TimeTracker.Domain.TimeTrack;
+using TimeTracker.Application.TimeTrack.Commands;
 using TimeTracker.Infra.Write;
 
 namespace TimeTracker.Application.TimeTrack
 {
-    public class TimeTrackService : IRequestHandler<CreateTimeTrack>
+    public class TimeTrackService : IRequestHandler<CreateTimeTrack, Guid>
     {
         private readonly IWriteRepository _writeRepository;
         private readonly IMediator _mediator;
@@ -17,15 +19,15 @@ namespace TimeTracker.Application.TimeTrack
             _writeRepository = writeRepository;
         }
 
-        public async Task<Unit> Handle(CreateTimeTrack request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateTimeTrack request, CancellationToken cancellationToken)
         {
-            var trackTime = Domain.TimeTrack.TimeTrack.Create(request.Id, request.When);
+            var trackTime = Domain.TimeTrack.TimeTrack.Create(request.Id, request.When, (TimeTrackType)request.Type);
 
             var events = await _writeRepository.Save(trackTime);
 
             foreach(var evt in events) await _mediator.Publish(evt, cancellationToken);
 
-            return Unit.Value;
+            return trackTime.Id;
         }
     }
 }

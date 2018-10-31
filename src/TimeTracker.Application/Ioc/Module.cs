@@ -2,7 +2,9 @@
 using Autofac;
 using AutofacSerilogIntegration;
 using MediatR;
+using FluentValidation;
 using MediatR.Pipeline;
+using TimeTracker.Application.Behaviors;
 
 namespace TimeTracker.Application.Ioc
 {
@@ -13,9 +15,9 @@ namespace TimeTracker.Application.Ioc
             builder.RegisterModule(new TimeTracker.Utils.Ioc.Module());
             builder.RegisterModule(new TimeTracker.Infra.Write.Ioc.Module());
             builder.RegisterModule(new TimeTracker.Infra.Read.Ioc.Module());
-            
+
             builder.RegisterLogger();
-            
+
             RegisterMediatr(builder);
         }
 
@@ -29,10 +31,12 @@ namespace TimeTracker.Application.Ioc
                 typeof(INotificationHandler<>)
             };
 
+            var assembly = typeof(Module).GetTypeInfo().Assembly;
+
             foreach (var mediatrOpenType in mediatrOpenTypes)
             {
                 builder
-                    .RegisterAssemblyTypes(typeof(Module).GetTypeInfo().Assembly)
+                    .RegisterAssemblyTypes(assembly)
                     .AsClosedTypesOf(mediatrOpenType)
                     .AsImplementedInterfaces();
             }
@@ -40,6 +44,9 @@ namespace TimeTracker.Application.Ioc
 
             builder.RegisterGeneric(typeof(RequestPostProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(RequestPreProcessorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(ValidationBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            
+            builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IValidator<>));
 
             builder.Register<ServiceFactory>(ctx =>
             {

@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 
 import { TimeTrackActions } from '../actions';
 import { editTimeTrackAction } from '../actions/time-track';
+import { UUID } from '../code/uuid';
 import TimeTrackListComponent, {
   ITimeTrackListDispatches,
   ITimeTrackListProps
@@ -21,7 +22,7 @@ const mapStateToProps = (state: State): ITimeTrackListProps => ({
 const mapDispatchToProps = (
   dispatch: Dispatch<TimeTrackActions>
 ): ITimeTrackListDispatches => ({
-  editTimeTrack: (id: string) => dispatch(editTimeTrackAction(id))
+  editTimeTrack: (id: UUID) => dispatch(editTimeTrackAction(id))
 });
 
 const TimeTrackList = connect(

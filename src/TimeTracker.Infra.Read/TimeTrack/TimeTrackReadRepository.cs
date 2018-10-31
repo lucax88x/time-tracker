@@ -7,7 +7,7 @@ namespace TimeTracker.Infra.Read.TimeTrack
 {
     public interface ITimeTrackReadRepository
     {
-        Task Add(Guid id, DateTimeOffset when);
+        Task Add(Guid id, DateTimeOffset when, int type);
         Task<ImmutableArray<TimeTrackReadDto>> Get();
         Task<TimeTrackReadDto> GetById(Guid id);
     }
@@ -21,9 +21,9 @@ namespace TimeTracker.Infra.Read.TimeTrack
             _repository = readRepositoryFactory.Build("timetrack");
         }
 
-        public async Task Add(Guid id, DateTimeOffset when)
+        public async Task Add(Guid id, DateTimeOffset when, int type)
         {
-            var dto = new TimeTrackReadDto(id, when);
+            var dto = new TimeTrackReadDto(id, when, type);
 
             await _repository.Set(id, dto);
             await _repository.SortedSetAdd("by-when", dto.When.UtcTicks, dto);

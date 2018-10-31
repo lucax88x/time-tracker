@@ -1,4 +1,4 @@
-import { TimeTrackModel } from 'src/models/time-track';
+import { ITimeTrackOutputModel } from '../../models/time-track.output-model';
 
 export const getTimeTracks = `
   {
@@ -8,8 +8,8 @@ export const getTimeTracks = `
     }
   }
 `;
-export interface IGetTimeTracksModel {
-  timeTracks: TimeTrackModel[];
+export interface IGetTimeTracksResponse {
+  timeTracks: ITimeTrackOutputModel[];
 }
 
 export const getTimeTrackById = `
@@ -20,6 +20,9 @@ export const getTimeTrackById = `
     }
   } 
 `;
-export interface IGetTimeTrackByIdModel {
-  timeTrack: TimeTrackModel;
+export interface IGetTimeTrackByIdPayload {
+  id: string;
+}
+export interface IGetTimeTrackByIdResponse {
+  timeTrack: ITimeTrackOutputModel;
 }

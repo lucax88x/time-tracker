@@ -1,6 +1,10 @@
 import './index.scss';
 
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import {
+  createMuiTheme,
+  CssBaseline,
+  MuiThemeProvider
+} from '@material-ui/core';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import LuxonUtils from 'material-ui-pickers/utils/luxon-utils';
 import * as React from 'react';
@@ -21,6 +25,9 @@ import { ITimeTrackState } from './states/time-track';
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true
+  },
+  palette: {
+    type: 'dark'
   }
 });
 
@@ -45,6 +52,8 @@ ReactDOM.render(
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={LuxonUtils}>
+        <CssBaseline />
+
         <App />
       </MuiPickersUtilsProvider>
     </MuiThemeProvider>

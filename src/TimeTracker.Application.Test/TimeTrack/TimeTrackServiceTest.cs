@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentValidation;
 using TimeTracker.Application.Ioc;
-using TimeTracker.Core;
-using TimeTracker.Domain.TimeTrack.Commands;
+using TimeTracker.Application.TimeTrack.Commands;
+using TimeTracker.Core.Exceptions.Technical;
+using TimeTracker.Domain.TimeTrack;
 using TimeTracker.Infra.Read.TimeTrack;
 using TimeTracker.Test.Common;
 using TimeTracker.Test.Infra.Common;
@@ -25,16 +27,28 @@ namespace TimeTracker.Application.Test.TimeTrack
         }
 
         [Fact]
-        public async Task should_track_time()
-        {            
+        public async Task should_not_allow_to_track_with_invalid_type()
+        {
             // GIVEN
-            var id = Guid.NewGuid();
-            
-            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, id);
+            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, (int) TimeTrackType.Unknown);
 
             // WHEN           
-            await _sandbox.Mediator.Send(command);
-            
+            Func<Task> action = async () => await _sandbox.Mediator.Send(command);
+
+            // THEN
+            action.Should().Throw<ValidationException>();
+            _sandbox.Should.Mediator.Be("CreateTimeTrack");
+        }
+
+        [Fact]
+        public async Task should_track_time()
+        {
+            // GIVEN
+            var command = new CreateTimeTrack(DateTimeOffset.UtcNow, (int) TimeTrackType.In);
+
+            // WHEN           
+            var id = await _sandbox.Mediator.Send(command);
+
             // THEN
             _sandbox.Should.Mediator.Be("CreateTimeTrack -> TimeTracked");
             await _sandbox.Should.Cassandra.Exists(id);

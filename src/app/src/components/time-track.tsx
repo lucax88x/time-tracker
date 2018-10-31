@@ -1,23 +1,34 @@
+import { ListItem, ListItemText } from '@material-ui/core';
+import { DateTime } from 'luxon';
 import React from 'react';
-import { TimeTrackModel } from 'src/models/time-track';
+
+import { UUID } from '../code/uuid';
+import { ITimeTrackModel } from '../models/time-track';
 
 interface ITimeTrackPropDispatches {
-  onClick: (id: string) => void;
+  onClick: (id: UUID) => void;
 }
 
 export class TimeTrack extends React.Component<
-  TimeTrackModel & ITimeTrackPropDispatches
+  ITimeTrackModel & ITimeTrackPropDispatches
 > {
   public render() {
     return (
-      <li onClick={this.handleOnClick}>
-        {this.props.type} {this.props.when}
-      </li>
+      <ListItem onClick={this.handleOnClick}>
+        <ListItemText
+          primary={this.props.when.toLocaleString(DateTime.DATE_HUGE)}
+          secondary={this.props.when.toLocaleString(
+            DateTime.TIME_24_WITH_SECONDS
+          )}
+        />
+      </ListItem>
     );
   }
 
   private handleOnClick = () => {
-    this.props.onClick(this.props.id);
+    if (!this.props.id.isEmpty) {
+      this.props.onClick(this.props.id);
+    }
   };
 }
 export default TimeTrack;

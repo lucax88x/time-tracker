@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
 
-import { TimeTrackModel } from '../models/time-track';
+import { ITimeTrackModel } from '../models/time-track';
+import { ITimeTrackInputModel } from '../models/time-track.input-model';
 
 export interface ITimeTrackApi {
-  create(model: TimeTrackModel): Observable<string>;
-  get(): Observable<TimeTrackModel[]>;
-  getById(id: string): Observable<TimeTrackModel>;
+  create(model: ITimeTrackInputModel): Observable<string>;
+  get(): Observable<ITimeTrackModel[]>;
+  getById(id: string): Observable<ITimeTrackModel>;
 }
