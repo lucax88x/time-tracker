@@ -1,11 +1,9 @@
 import {
-  Avatar,
   Button,
   createStyles,
   FormControl,
   FormControlLabel,
   FormGroup,
-  FormLabel,
   Radio,
   RadioGroup,
   Theme,
@@ -39,15 +37,13 @@ const styles = (theme: Theme) =>
       flexWrap: 'wrap',
       padding: 25
     },
+    radioGroup: {
+      flexDirection: 'row'
+    },
     textField: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
       width: 200
-    },
-    avatar: {
-      margin: 10,
-      width: 60,
-      height: 60
     }
   });
 
@@ -55,8 +51,6 @@ class AddTimeTrack extends React.Component<
   IAddTimeTrackDispatches & WithStyles<typeof styles>
 > {
   public render() {
-    console.log(TimeTrackType.IN);
-    console.log(TimeTrackType[TimeTrackType.IN]);
     const { classes } = this.props;
 
     return (
@@ -83,17 +77,9 @@ class AddTimeTrack extends React.Component<
               onSubmit={handleSubmit}
             >
               <FormControl>
-                <FormLabel>Add</FormLabel>
-                <FormLabel>
-                  <Avatar
-                    alt="Adelle Charles"
-                    src="/static/images/uxceo-128.jpg"
-                    className={classes.avatar}
-                  />
-                </FormLabel>
                 <FormGroup>
                   <RadioGroup
-                    aria-label="Tyoe"
+                    className={classes.radioGroup}
                     name="type"
                     value={values.type.toString()}
                     onChange={handleChange}
@@ -116,13 +102,13 @@ class AddTimeTrack extends React.Component<
                     value={values.when}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    label="24h clock"
                   />
                 </FormGroup>
                 <hr />
                 <Button
                   variant="extendedFab"
                   aria-label="Add"
+                  color="primary"
                   type="submit"
                   disabled={isSubmitting}
                 >
